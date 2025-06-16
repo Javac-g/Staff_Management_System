@@ -8,17 +8,16 @@ import java.util.stream.Stream;
 
 import static java.lang.String.format;
 
-public class User {
+public class User implements UserPatter{
 
     private int age;
     private String name;
-    private UUID id;
-    private LocalDateTime dateOfCreation;
+    private final UUID id;
+    private final LocalDateTime dateOfCreation;
 
 
-    public User(int age, String name) {
-        this.age = age;
-        this.name = name;
+    public User() {
+
         Supplier<UUID> supplier = UUID::randomUUID;
         Stream<UUID> infiniteStream = Stream.generate(supplier);
         id = infiniteStream.findFirst().orElseThrow( ()-> new IllegalStateException("No UUID generated") );
