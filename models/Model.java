@@ -17,7 +17,7 @@ public class Model {
 
         try(FileOutputStream fos = new FileOutputStream("info.log",true);
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
-            DataOutputStream dos = new DataOutputStream(bos);)
+            DataOutputStream dos = new DataOutputStream(fos);)
         {
             bos.write(str);
             bos.writeTo(fos);
@@ -37,16 +37,17 @@ public class Model {
         }
 
     }
-    public User addUsed(String fn,String ln,String em,Integer age) throws FileNotFoundException {
+    public User addUsed(String first_name,String last_name,String email,Integer age) throws FileNotFoundException {
         User user = new User();
+        logger.info("First name: " + first_name);
+        user.setFirstName(first_name);
+        user.setLastName(last_name);
         user.setAge(age);
-        user.setFirstName(fn);
-        user.setLastName(ln);
-        user.setEmail(em);
+        user.setEmail(email);
         setID(user);
-        dataBase.add(user);
         text_log(user, "Created: ");
         logger.info("Searched: "+ user.toString());
+        dataBase.add(user);
         return user;
     }
     public User findUser(String email){

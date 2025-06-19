@@ -72,7 +72,7 @@ public class User implements UserPatter{
         return dateOfCreation;
     }
     public String getFull_name(){
-        return this.full_name + " " + this.last_name;
+        return this.first_name + " " + this.last_name;
     }
     @Override
     public int hashCode(){
