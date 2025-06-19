@@ -37,11 +37,12 @@ public class Model {
         }
 
     }
-    public User addUsed(User data) throws FileNotFoundException {
+    public User addUsed(String fn,String ln,String em,Integer age) throws FileNotFoundException {
         User user = new User();
-        user.setAge(data.getAge());
-        user.setFirstName(data.getFirstName());
-        user.setLastName(data.getLastName());
+        user.setAge(age);
+        user.setFirstName(fn);
+        user.setLastName(ln);
+        user.setEmail(em);
         setID(user);
         dataBase.add(user);
         text_log(user, "Created: ");
@@ -56,13 +57,13 @@ public class Model {
         }
         return null;
     }
-    public User updateUser(String email, User data) throws FileNotFoundException {
+    public User updateUser(String email, String fn, String ln, String em,Integer age) throws FileNotFoundException {
         User x = findUser(email);
         if (x != null){
-            x.setFirstName(data.getFirstName());
-            x.setLastName(data.getLastName());
-            x.setEmail(data.getEmail());
-            x.setAge(data.getAge());
+            x.setFirstName(fn);
+            x.setLastName(ln);
+            x.setEmail(em);
+            x.setAge(age);
             text_log(x,"Updated: ");
             logger.info("Updated: " + x.toString());
             return x;
@@ -81,7 +82,7 @@ public class Model {
             dataBase.remove(index);
             return index;
         }
-        return 0;
+        return index;
     }
 
 
