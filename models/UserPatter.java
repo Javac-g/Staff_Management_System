@@ -5,10 +5,12 @@ import java.util.UUID;
 
 public interface UserPatter {
     int getAge();
-    UUID getId();
+    UUID getUuid();
     void setAge(int age);
-    void setName(String name);
-    String getName();
+    void setFirstName(String first_name);
+    void setLastName(String last_name);
+    String getFirstName();
+    String getLastName();
     LocalDateTime getDateOfCreation();
 }
 
