@@ -52,34 +52,41 @@ public class Model {
     }
     public User addUsed(String first_name,String last_name,String email,Integer age) throws FileNotFoundException {
         User user = new User();
+        try {
+            if (isNullOrEmpty(first_name) || isNullOrEmpty(last_name)) {
+                throw new IllegalArgumentException("Name parameters should be filled");
+            }
+            user.setFirstName(first_name);
+            user.setLastName(last_name);
 
-        if (isNullOrEmpty(first_name) || isNullOrEmpty(last_name)) {
-            throw new IllegalArgumentException("Name parameters should be filled");
-        }
-        user.setFirstName(first_name);
-        user.setLastName(last_name);
+            dataBase.stream().filter(x -> x.getEmail()
+                            .equals(email))
+                    .findAny()
+                    .ifPresent(x -> {
+                        throw new IllegalArgumentException("Email is already in system");
+                    });
 
-        dataBase.stream().filter(x -> x.getEmail()
-                .equals(email))
-                .findAny()
-                .ifPresent(x -> {
-                    throw new IllegalArgumentException("Email is already in system");
-                });
-        if (email_validation(email)) {
-            throw new IllegalArgumentException("Invalid email format");
+            if (!email_validation(email)){
+                user.setEmail(email);
+            }else {
+                throw new IllegalArgumentException("Invalid email format");
+            }
+            if (age < 18){
+                throw new IllegalArgumentException("The user is underage: " + age);
+            } else {
+                user.setAge(age);
+            }
+
+            setID(user);
+            text_log(user, "Created: ");
+            logger.info("Searched: "+ user.toString());
+            dataBase.add(user);
+            return user;
+        }catch (Exception e){
+            System.err.println("Error adding user: " + e.getMessage());
+            return User.getUnknown(email);
         }
-        if (!email_validation(email)){
-         user.setEmail(email);
-        }
-        if (age < 18){
-            throw new IllegalArgumentException("The user is underage: " + age);
-        }
-        user.setAge(age);
-        setID(user);
-        text_log(user, "Created: ");
-        logger.info("Searched: "+ user.toString());
-        dataBase.add(user);
-        return user;
+
     }
     public User findUser(String email){
 

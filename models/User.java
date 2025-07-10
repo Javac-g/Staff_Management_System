@@ -23,6 +23,15 @@ public class User implements UserPatter{
         uuid = infiniteStream.findFirst().orElseThrow( ()-> new IllegalStateException("No UUID generated") );
         this.dateOfCreation = LocalDateTime.now();
     }
+    private User(String email) {
+        this.email = email;
+        this.first_name = "John|Jane";
+        this.last_name = "Dou";
+        this.age = 0;
+        id = -1;
+        uuid=null;
+        this.dateOfCreation = LocalDateTime.now();
+    }
 
     public String getEmail() {
         return email;
@@ -67,7 +76,9 @@ public class User implements UserPatter{
     public UUID getUuid() {
         return uuid;
     }
-
+    public static User getUnknown(String email){
+        return new User(email);
+    }
     public LocalDateTime getDateOfCreation() {
         return dateOfCreation;
     }
