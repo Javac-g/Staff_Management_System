@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
+import static jdk.internal.joptsimple.internal.Strings.isNullOrEmpty;
+
 public class Model {
 
     private static final List<User> dataBase = new ArrayList<>();
@@ -51,7 +53,7 @@ public class Model {
     public User addUsed(String first_name,String last_name,String email,Integer age) throws FileNotFoundException {
         User user = new User();
 
-        if (first_name.isEmpty() || last_name.isEmpty()) {
+        if (isNullOrEmpty(first_name) || isNullOrEmpty(last_name)) {
             throw new IllegalArgumentException("Name parameters should be filled");
         }
         user.setFirstName(first_name);
