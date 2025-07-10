@@ -4,6 +4,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 
 public class Model {
 
@@ -37,13 +38,32 @@ public class Model {
         }
 
     }
+    private boolean email_validation(String email){
+        try{
+            Pattern pattern = Pattern.compile(EMAIL_REGEX);
+            return !pattern.matcher(email).matches();
+        }catch (Exception e){
+            System.out.println("Error validating email: " + e.toString());
+            return true;
+        }
+
+    }
     public User addUsed(String first_name,String last_name,String email,Integer age) throws FileNotFoundException {
         User user = new User();
         logger.info("First name: " + first_name);
         user.setFirstName(first_name);
         user.setLastName(last_name);
         user.setAge(age);
-        user.setEmail(email);
+        dataBase.stream().filter(x -> x.getEmail()
+                .equals(email))
+                .findAny()
+                .ifPresent(x -> {
+                    throw new IllegalArgumentException("Email is already in system");
+                });
+
+        if (!email_validation(email)){
+         user.setEmail(email);
+        }
         setID(user);
         text_log(user, "Created: ");
         logger.info("Searched: "+ user.toString());
@@ -51,12 +71,8 @@ public class Model {
         return user;
     }
     public User findUser(String email){
-        for (User x: dataBase){
-            if (x.getEmail().equals(email)){
-                return x;
-            }
-        }
-        return null;
+
+        return dataBase.stream().filter(x -> x.getEmail().equals(email)).findFirst().orElse(null);
     }
     public User updateUser(String email, String fn, String ln, String em,Integer age) throws FileNotFoundException {
         User x = findUser(email);
