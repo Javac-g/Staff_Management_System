@@ -50,20 +50,29 @@ public class Model {
     }
     public User addUsed(String first_name,String last_name,String email,Integer age) throws FileNotFoundException {
         User user = new User();
-        logger.info("First name: " + first_name);
+
+        if (first_name.isEmpty() || last_name.isEmpty()) {
+            throw new IllegalArgumentException("Name parameters should be filled");
+        }
         user.setFirstName(first_name);
         user.setLastName(last_name);
-        user.setAge(age);
+
         dataBase.stream().filter(x -> x.getEmail()
                 .equals(email))
                 .findAny()
                 .ifPresent(x -> {
                     throw new IllegalArgumentException("Email is already in system");
                 });
-
+        if (email_validation(email)) {
+            throw new IllegalArgumentException("Invalid email format");
+        }
         if (!email_validation(email)){
          user.setEmail(email);
         }
+        if (age < 18){
+            throw new IllegalArgumentException("The user is underage: " + age);
+        }
+        user.setAge(age);
         setID(user);
         text_log(user, "Created: ");
         logger.info("Searched: "+ user.toString());
@@ -72,7 +81,7 @@ public class Model {
     }
     public User findUser(String email){
 
-        return dataBase.stream().filter(x -> x.getEmail().equals(email)).findFirst().orElse(null);
+        return dataBase.stream().filter(x -> x.getEmail().equals(email)).findAny().orElse(null);
     }
     public User updateUser(String email, String fn, String ln, String em,Integer age) throws FileNotFoundException {
         User x = findUser(email);
