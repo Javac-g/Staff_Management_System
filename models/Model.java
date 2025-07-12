@@ -12,7 +12,7 @@ public class Model {
 
     private static final List<User> dataBase = new ArrayList<>();
     private static final Logger logger = Logger.getLogger(Model.class.getName());
-    private static final String EMAIL_REGEX = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
+
 
     public void text_log(UserPatter user, String method) throws FileNotFoundException {
 
@@ -42,42 +42,20 @@ public class Model {
         }
 
     }
-    private boolean email_validation(String email){
-        dataBase.stream().filter(x -> x.getEmail()
-                        .equals(email))
-                .findAny()
-                .ifPresent(x -> {
-                    throw new IllegalArgumentException("Email is already in system");
-                });
-        try{
-            Pattern pattern = Pattern.compile(EMAIL_REGEX);
-            return !pattern.matcher(email).matches();
-        }catch (Exception e){
-            System.out.println("Error validating email: " + e);
-            return true;
-        }
 
-    }
     public UserPatter addUsed(String first_name,String last_name,String email,Integer age) throws FileNotFoundException {
         User user = new User();
-        try {
-            if (isNullOrEmpty(first_name) || isNullOrEmpty(last_name)) {
-                throw new IllegalArgumentException("Name parameters should be filled");
-            }else{
-                user.setFirstName(first_name);
-                user.setLastName(last_name);
-            }
+        validateName(first_name,last_name);
+        validateAge(age);
+        validateEmailUniquenessAndFormat(email);
 
-            if (!email_validation(email)){
-                user.setEmail(email);
-            }else {
-                throw new IllegalArgumentException("Invalid email format");
-            }
-            if (age < 18){
-                throw new IllegalArgumentException("The user is underage: " + age);
-            } else {
-                user.setAge(age);
-            }
+        try {
+
+            user.setFirstName(first_name);
+            user.setLastName(last_name);
+            user.setEmail(email);
+            user.setAge(age);
+
 
             setID(user);
             text_log(user, "Created: ");
@@ -91,9 +69,8 @@ public class Model {
 
     }
     public User findUser(String email) throws FileNotFoundException {
-        if (isNullOrEmpty(email)){
-            throw new IllegalArgumentException("Email is not valid or empty");
-        }
+       validateEmailUniquenessAndFormat(email);
+
         User user = dataBase.stream()
                 .filter(u -> u.getEmail().equals(email))
                 .findFirst()
@@ -111,9 +88,11 @@ public class Model {
         return user;
     }
     public UserPatter updateUser(String email, String fn, String ln, String em,Integer age) throws FileNotFoundException {
-        if (isNullOrEmpty(fn) || isNullOrEmpty(ln) || isNullOrEmpty(em) || isNullOrEmpty(email)){
-            throw new IllegalArgumentException("All arguments should be entered");
-        }
+      validateName(fn,ln);
+      validateEmailUniquenessAndFormat(email);
+      validateEmailUniquenessAndFormat(em);
+      validateAge(age);
+
         if (age < 18){
             throw new IllegalArgumentException("The user is underage - cannot be accepted");
         }
