@@ -8,6 +8,7 @@ import views.View;
 import java.io.FileNotFoundException;
 
 public class Controller {
+    private static final SwitchController swithController = new SwitchController();
     public static void init_controller() throws FileNotFoundException {
         try {
             View view = new View();
@@ -19,53 +20,11 @@ public class Controller {
                 int choice = view.getNum("Enter: ");
 
                 switch (choice){
-                    case 1 -> {
-                        System.out.println("User creation menu:");
-                        UserPatter user = model.addUsed(
-                                view.getStr("Enter first name: "),
-                                view.getStr("Enter last name: "),
-                                view.getStr("Enter email: "),
-                                view.getNum("Enter age: ")
-                        );
-                        System.out.println("User created");
-                        view.printData(user);
-                    }
-                    case 2 ->{
-                        System.out.println("Search menu ");
-                        UserPatter x = model.findUser(view.getStr("Enter email: "));
-                        if (x != null){
-                            view.printData(x);
-                        }else {
-                            view.printMsg("User not found");
-                        }
-
-                    }
-                    case 3 -> {
-                        System.out.println("Update user menu: ");
-                        UserPatter x = model.updateUser(view.getStr("Enter email of user to update:"),
-                                view.getStr("Enter first name: "),
-                                view.getStr("Enter last name: "),
-                                view.getStr("Enter email: "),
-                                view.getNum("Enter age: "));
-                        if (x != null){
-                            view.printData(x);
-                        }else{
-                            view.printMsg("Nobody updated");
-                        }
-                    }
-                    case 4 -> {
-                        view.printMsg("Delete user menu");
-                        int id = model.deleteUser(view.getNum("Enter id to delete user"));
-                        if (id != -1){
-                            view.printMsg("Deleted user id: " + id);
-                        }else {
-                            view.printMsg("Nobody deleted");
-                        }
-                    }
-                    case 5 -> {
-                        view.printMsg("bye bye");
-                        loop = false;
-                    }
+                    case 1 -> swithController.caseOne();
+                    case 2 -> swithController.caseTwo();
+                    case 3 -> swithController.caseThree();
+                    case 4 -> swithController.caseFour();
+                    case 5 -> loop =  swithController.caseFive();
                     default -> {view.printMsg("Wrong menu number");}
                 }
             }
