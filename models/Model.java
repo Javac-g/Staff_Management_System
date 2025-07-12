@@ -14,7 +14,7 @@ public class Model {
     private static final Logger logger = Logger.getLogger(Model.class.getName());
     private static final String EMAIL_REGEX = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
 
-    public void text_log(User user, String method) throws FileNotFoundException {
+    public void text_log(UserPatter user, String method) throws FileNotFoundException {
 
         byte[] str = ("Method: " + method ).getBytes();
 
@@ -26,11 +26,13 @@ public class Model {
             bos.writeTo(fos);
             dos.writeUTF(user.toString());
 
+        }catch (FileNotFoundException e1){
+            e1.printStackTrace();
         }catch (IOException e) {
             e.printStackTrace();
         }
     }
-    private void setID(User user){
+    private void setID(UserPatter user){
         if (!dataBase.isEmpty()) {
             int id = dataBase.get(dataBase.size() - 1).getId() + 1;
             user.setId(id);
@@ -41,30 +43,30 @@ public class Model {
 
     }
     private boolean email_validation(String email){
+        dataBase.stream().filter(x -> x.getEmail()
+                        .equals(email))
+                .findAny()
+                .ifPresent(x -> {
+                    throw new IllegalArgumentException("Email is already in system");
+                });
         try{
             Pattern pattern = Pattern.compile(EMAIL_REGEX);
             return !pattern.matcher(email).matches();
         }catch (Exception e){
-            System.out.println("Error validating email: " + e.toString());
+            System.out.println("Error validating email: " + e);
             return true;
         }
 
     }
-    public User addUsed(String first_name,String last_name,String email,Integer age) throws FileNotFoundException {
+    public UserPatter addUsed(String first_name,String last_name,String email,Integer age) throws FileNotFoundException {
         User user = new User();
         try {
             if (isNullOrEmpty(first_name) || isNullOrEmpty(last_name)) {
                 throw new IllegalArgumentException("Name parameters should be filled");
+            }else{
+                user.setFirstName(first_name);
+                user.setLastName(last_name);
             }
-            user.setFirstName(first_name);
-            user.setLastName(last_name);
-
-            dataBase.stream().filter(x -> x.getEmail()
-                            .equals(email))
-                    .findAny()
-                    .ifPresent(x -> {
-                        throw new IllegalArgumentException("Email is already in system");
-                    });
 
             if (!email_validation(email)){
                 user.setEmail(email);
@@ -79,7 +81,7 @@ public class Model {
 
             setID(user);
             text_log(user, "Created: ");
-            logger.info("Searched: "+ user.toString());
+            logger.info("Searched: " + user);
             dataBase.add(user);
             return user;
         }catch (Exception e){
@@ -88,23 +90,49 @@ public class Model {
         }
 
     }
-    public User findUser(String email){
-
-        return dataBase.stream().filter(x -> x.getEmail().equals(email)).findAny().orElse(null);
-    }
-    public User updateUser(String email, String fn, String ln, String em,Integer age) throws FileNotFoundException {
-        User x = findUser(email);
-        if (x != null){
-            x.setFirstName(fn);
-            x.setLastName(ln);
-            x.setEmail(em);
-            x.setAge(age);
-            text_log(x,"Updated: ");
-            logger.info("Updated: " + x.toString());
-            return x;
+    public User findUser(String email) throws FileNotFoundException {
+        if (isNullOrEmpty(email)){
+            throw new IllegalArgumentException("Email is not valid or empty");
         }
-        logger.info("Not found");
-        return null;
+        User user = dataBase.stream()
+                .filter(u -> u.getEmail().equals(email))
+                .findFirst()
+                .orElseGet(() -> {
+                    User unknown = User.getUnknown(email);
+                    try {
+                        text_log(unknown, "Searched, not found: ");
+                    } catch (FileNotFoundException e) {
+                        throw new RuntimeException(e);
+                    }
+                    return unknown;
+                });
+
+        text_log(user, "Searched, found: ");
+        return user;
+    }
+    public UserPatter updateUser(String email, String fn, String ln, String em,Integer age) throws FileNotFoundException {
+        if (isNullOrEmpty(fn) || isNullOrEmpty(ln) || isNullOrEmpty(em) || isNullOrEmpty(email)){
+            throw new IllegalArgumentException("All arguments should be entered");
+        }
+        if (age < 18){
+            throw new IllegalArgumentException("The user is underage - cannot be accepted");
+        }
+        User x = findUser(email);
+        if (x == null){
+            logger.info("Not found");
+            throw new IllegalArgumentException("Model - update user method - user not found by email: " + email);
+        }
+
+        x.setFirstName(fn);
+        x.setLastName(ln);
+        x.setEmail(em);
+        x.setAge(age);
+
+        text_log(x,"Updated: ");
+        logger.info("Updated: " + x);
+        return x;
+
+
     }
     public Integer deleteUser(Integer id){
         int index = -1;

@@ -1,6 +1,7 @@
 package views;
 
 import models.User;
+import models.UserPatter;
 
 import java.util.Scanner;
 
@@ -15,7 +16,7 @@ public class View {
         System.out.println("4 - delete user");
         System.out.println("5 - exit");
     }
-    public void printData(User user){
+    public void printData(UserPatter user){
         System.out.println(user.toString());
     }
     public void printMsg(String msg){

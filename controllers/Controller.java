@@ -2,6 +2,7 @@ package controllers;
 
 import models.Model;
 import models.User;
+import models.UserPatter;
 import views.View;
 
 import java.io.FileNotFoundException;
@@ -20,7 +21,7 @@ public class Controller {
                 switch (choice){
                     case 1 -> {
                         System.out.println("User creation menu:");
-                        User user = model.addUsed(
+                        UserPatter user = model.addUsed(
                                 view.getStr("Enter first name: "),
                                 view.getStr("Enter last name: "),
                                 view.getStr("Enter email: "),
@@ -31,7 +32,7 @@ public class Controller {
                     }
                     case 2 ->{
                         System.out.println("Search menu ");
-                        User x = model.findUser(view.getStr("Enter email: "));
+                        UserPatter x = model.findUser(view.getStr("Enter email: "));
                         if (x != null){
                             view.printData(x);
                         }else {
@@ -41,7 +42,7 @@ public class Controller {
                     }
                     case 3 -> {
                         System.out.println("Update user menu: ");
-                        User x = model.updateUser(view.getStr("Enter email of user to update:"),
+                        UserPatter x = model.updateUser(view.getStr("Enter email of user to update:"),
                                 view.getStr("Enter first name: "),
                                 view.getStr("Enter last name: "),
                                 view.getStr("Enter email: "),
