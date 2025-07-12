@@ -4,14 +4,13 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
-import java.util.regex.Pattern;
 
-import static jdk.internal.joptsimple.internal.Strings.isNullOrEmpty;
 
 public class Model {
 
     private static final List<User> dataBase = new ArrayList<>();
     private static final Logger logger = Logger.getLogger(Model.class.getName());
+    private static final Validator validator = new Validator();
 
 
     public void text_log(UserPatter user, String method) throws FileNotFoundException {
@@ -20,16 +19,14 @@ public class Model {
 
         try(FileOutputStream fos = new FileOutputStream("info.log",true);
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
-            DataOutputStream dos = new DataOutputStream(fos);)
+            DataOutputStream dos = new DataOutputStream(fos))
         {
             bos.write(str);
             bos.writeTo(fos);
             dos.writeUTF(user.toString());
 
-        }catch (FileNotFoundException e1){
-            e1.printStackTrace();
-        }catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
         }
     }
     private void setID(UserPatter user){
@@ -45,9 +42,10 @@ public class Model {
 
     public UserPatter addUsed(String first_name,String last_name,String email,Integer age) throws FileNotFoundException {
         User user = new User();
-        validateName(first_name,last_name);
-        validateAge(age);
-        validateEmailUniquenessAndFormat(email);
+        validator.validateName(first_name,last_name);
+        validator.validateAge(age);
+        validator.validate_email_uniqueness(email,dataBase);
+        validator.validateEmailFormat(email);
 
         try {
 
@@ -69,7 +67,7 @@ public class Model {
 
     }
     public User findUser(String email) throws FileNotFoundException {
-       validateEmailUniquenessAndFormat(email);
+        validator.validateEmailFormat(email);
 
         User user = dataBase.stream()
                 .filter(u -> u.getEmail().equals(email))
@@ -87,24 +85,17 @@ public class Model {
         text_log(user, "Searched, found: ");
         return user;
     }
-    public UserPatter updateUser(String email, String fn, String ln, String em,Integer age) throws FileNotFoundException {
-      validateName(fn,ln);
-      validateEmailUniquenessAndFormat(email);
-      validateEmailUniquenessAndFormat(em);
-      validateAge(age);
-
-        if (age < 18){
-            throw new IllegalArgumentException("The user is underage - cannot be accepted");
-        }
+    public UserPatter updateUser(String email, String first_name, String last_name, String newEmail,Integer age) throws FileNotFoundException {
         User x = findUser(email);
-        if (x == null){
-            logger.info("Not found");
-            throw new IllegalArgumentException("Model - update user method - user not found by email: " + email);
-        }
+        validator.validateUser(x);
+        validator.validateName(first_name,last_name);
+        validator.validateEmailFormat(newEmail);
+        validator.validateEmailSimilarity(email,newEmail,dataBase);
+        validator.validateAge(age);
 
-        x.setFirstName(fn);
-        x.setLastName(ln);
-        x.setEmail(em);
+        x.setFirstName(first_name);
+        x.setLastName(last_name);
+        x.setEmail(newEmail);
         x.setAge(age);
 
         text_log(x,"Updated: ");
