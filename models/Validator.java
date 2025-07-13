@@ -13,9 +13,19 @@ public class Validator {
             throw new IllegalArgumentException("Name parameters should be filled");
         }
     }
+    public void validateFirstName(String firstName) {
+        if (isNullOrEmpty(firstName)) {
+            throw new IllegalArgumentException("First name is required");
+        }
+    }
 
+    public void validateLastName(String lastName) {
+        if (isNullOrEmpty(lastName)) {
+            throw new IllegalArgumentException("Last name is required");
+        }
+    }
     public void validateAge(Integer age) {
-        if (age == null || age < 18) {
+        if (age == null || age < 0 || age < 18)  {
             throw new IllegalArgumentException("The user is underage: " + age);
         }
     }

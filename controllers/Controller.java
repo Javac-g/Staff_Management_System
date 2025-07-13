@@ -1,18 +1,13 @@
 package controllers;
-
-import models.Model;
-import models.User;
-import models.UserPatter;
 import views.View;
-
 import java.io.FileNotFoundException;
 
 public class Controller {
     private static final SwitchController swithController = new SwitchController();
-    public static void init_controller() throws FileNotFoundException {
+    public static void init_controller() {
         try {
             View view = new View();
-            Model model = new Model();
+
             boolean loop = true;
 
             while (loop){
@@ -25,11 +20,11 @@ public class Controller {
                     case 3 -> swithController.caseThree();
                     case 4 -> swithController.caseFour();
                     case 5 -> loop =  swithController.caseFive();
-                    default -> {view.printMsg("Wrong menu number");}
+                    default -> view.printMsg("Wrong menu number");
                 }
             }
         }catch (FileNotFoundException e){
-            e.printStackTrace();
+            System.out.println("Switch error: " + e.getMessage());
         }
 
 

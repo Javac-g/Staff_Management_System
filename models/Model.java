@@ -29,6 +29,7 @@ public class Model {
             System.out.println(e.getMessage());
         }
     }
+
     private void setID(UserPatter user){
         if (!dataBase.isEmpty()) {
             int id = dataBase.get(dataBase.size() - 1).getId() + 1;
@@ -40,7 +41,7 @@ public class Model {
 
     }
 
-    public UserPatter addUsed(String first_name,String last_name,String email,Integer age) throws FileNotFoundException {
+    public User addUsed(String first_name,String last_name,String email,Integer age)  {
         User user = new User();
         validator.validateName(first_name,last_name);
         validator.validateAge(age);
@@ -118,6 +119,9 @@ public class Model {
         return index;
     }
 
+    public List<User> getDataBase(){
+        return dataBase;
+    }
 
 
 

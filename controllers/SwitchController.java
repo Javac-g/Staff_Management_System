@@ -1,7 +1,9 @@
 package controllers;
 
 import models.Model;
+import models.User;
 import models.UserPatter;
+import models.Validator;
 import views.View;
 
 import java.io.FileNotFoundException;
@@ -9,17 +11,35 @@ import java.io.FileNotFoundException;
 public class SwitchController {
     private final Model model = new Model();
     private final View view = new View();
-
+    private final Validator validator = new Validator();
     public void caseOne() throws FileNotFoundException {
-        System.out.println("User creation menu:");
-        UserPatter user = model.addUsed(
-                view.getStr("Enter first name: "),
-                view.getStr("Enter last name: "),
-                view.getStr("Enter email: "),
-                view.getNum("Enter age: ")
-        );
-        System.out.println("User created");
-        view.printData(user);
+
+       String firstName = "";
+       String lastName = "";
+       String email = "";
+       int age = -1;
+       boolean valid = false;
+
+       while (!valid){
+           view.printMsg("User creation menu:");
+
+           firstName = view.getStr("Enter first name: ");
+           lastName =  view.getStr("Enter last name: ");
+           email = view.getStr("Enter email: ");
+           age =   view.getNum("Enter age: ");
+
+           validator.validateName(firstName,lastName);
+           validator.validateEmailFormat(email);
+           validator.validate_email_uniqueness(email, model.getDataBase());
+           validator.validateAge(age);
+           valid = true;
+
+       }
+
+       User user = model.addUsed(firstName,lastName,email,age);
+
+       System.out.println("User created");
+       view.printData(user);
     }
     public void caseTwo() throws FileNotFoundException {
 
