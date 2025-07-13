@@ -43,7 +43,9 @@ public class Model {
 
     public User addUsed(String first_name,String last_name,String email,Integer age)  {
         User user = new User();
-        validator.validateName(first_name,last_name);
+
+        validator.validateFirstName(first_name);
+        validator.validateLastName(last_name);
         validator.validateAge(age);
         validator.validate_email_uniqueness(email,dataBase);
         validator.validateEmailFormat(email);
@@ -89,7 +91,8 @@ public class Model {
     public User updateUser(String email, String first_name, String last_name, String newEmail,Integer age) throws FileNotFoundException {
         User x = findUser(email);
         validator.validateUser(x);
-        validator.validateName(first_name,last_name);
+        validator.validateFirstName(first_name);
+        validator.validateLastName(last_name);
         validator.validateEmailFormat(newEmail);
         validator.validateEmailSimilarity(email,newEmail,dataBase);
         validator.validateAge(age);

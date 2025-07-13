@@ -3,24 +3,20 @@ package models;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import static jdk.internal.joptsimple.internal.Strings.isNullOrEmpty;
+
 
 
 public class Validator {
     private static final String EMAIL_REGEX = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
-    public void validateName(String firstName, String lastName) {
-        if (isNullOrEmpty(firstName) || isNullOrEmpty(lastName)) {
-            throw new IllegalArgumentException("Name parameters should be filled");
-        }
-    }
+
     public void validateFirstName(String firstName) {
-        if (isNullOrEmpty(firstName)) {
+        if (firstName == null || firstName.trim().isEmpty()  ) {
             throw new IllegalArgumentException("First name is required");
         }
     }
 
     public void validateLastName(String lastName) {
-        if (isNullOrEmpty(lastName)) {
+        if (lastName == null || lastName.trim().isEmpty()) {
             throw new IllegalArgumentException("Last name is required");
         }
     }
@@ -35,7 +31,7 @@ public class Validator {
         }
     }
     public void validateEmailFormat(String email) {
-        if (isNullOrEmpty(email)) {
+        if (email == null || email.trim().isEmpty()) {
             throw new IllegalArgumentException("Email is required");
         }
 
