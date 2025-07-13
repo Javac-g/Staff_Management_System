@@ -31,7 +31,7 @@ public class Validator {
     }
     public void validateUser(User x){
         if (x == null){
-            throw  new IllegalArgumentException("The user is null");
+            throw  new IllegalArgumentException("The user is not found");
         }
     }
     public void validateEmailFormat(String email) {

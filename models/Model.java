@@ -86,7 +86,7 @@ public class Model {
         text_log(user, "Searched, found: ");
         return user;
     }
-    public UserPatter updateUser(String email, String first_name, String last_name, String newEmail,Integer age) throws FileNotFoundException {
+    public User updateUser(String email, String first_name, String last_name, String newEmail,Integer age) throws FileNotFoundException {
         User x = findUser(email);
         validator.validateUser(x);
         validator.validateName(first_name,last_name);
