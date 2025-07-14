@@ -1,4 +1,6 @@
-package models;
+package com.pines.helpers;
+
+import com.pines.models.User;
 
 import java.util.List;
 import java.util.regex.Pattern;

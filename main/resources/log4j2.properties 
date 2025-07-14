@@ -1,0 +1,51 @@
+# === Core Config ===
+status = warn
+name = ProfessionalLogConfig
+
+# === Console Appender ===
+appender.console.type = Console
+appender.console.name = Console
+appender.console.target = SYSTEM_OUT
+appender.console.layout.type = PatternLayout
+appender.console.layout.pattern = %highlight{%d{HH:mm:ss.SSS} [%t] %-5level %c{1} - %msg%n}{FATAL=red blink, ERROR=red, WARN=yellow, INFO=green, DEBUG=cyan, TRACE=blue}
+appender.console.filter.threshold.type = ThresholdFilter
+appender.console.filter.threshold.level = debug
+
+# === Rolling File Appender ===
+appender.rolling.type = RollingFile
+appender.rolling.name = FileAppender
+appender.rolling.fileName = logs/app.log
+appender.rolling.filePattern = logs/app-%d{yyyy-MM-dd}-%i.log.gz
+appender.rolling.layout.type = PatternLayout
+appender.rolling.layout.pattern = %d{yyyy-MM-dd HH:mm:ss} [%t] %-5p %c{1}:%L - %msg%n
+appender.rolling.policies.type = Policies
+appender.rolling.policies.time.type = TimeBasedTriggeringPolicy
+appender.rolling.policies.time.interval = 1
+appender.rolling.policies.size.type = SizeBasedTriggeringPolicy
+appender.rolling.policies.size.size = 10MB
+appender.rolling.strategy.type = DefaultRolloverStrategy
+appender.rolling.strategy.max = 7
+
+# === Async Appender (buffers logs for better performance) ===
+appender.asyncConsole.type = Async
+appender.asyncConsole.name = AsyncConsole
+appender.asyncConsole.appenderRef.console.ref = Console
+
+appender.asyncFile.type = Async
+appender.asyncFile.name = AsyncFile
+appender.asyncFile.appenderRef.rolling.ref = FileAppender
+
+# === Root Logger ===
+rootLogger.level = info
+rootLogger.appenderRef.console.ref = AsyncConsole
+rootLogger.appenderRef.rolling.ref = AsyncFile
+
+# === Logger Overrides (per package) ===
+logger.project.name = com.example
+logger.project.level = info
+logger.project.additivity = false
+logger.project.appenderRef.console.ref = AsyncConsole
+logger.project.appenderRef.rolling.ref = AsyncFile
+
+# === Jansi Support for color in console (optional) ===
+property.log4j.skipJansi = false

@@ -1,7 +1,6 @@
-package views;
+package com.pines.views;
 
-import models.User;
-import models.UserPatter;
+import com.pines.models.UserPatter;
 
 import java.util.Scanner;
 

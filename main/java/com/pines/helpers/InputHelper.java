@@ -1,4 +1,4 @@
-package models;
+package com.pines.helpers;
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;

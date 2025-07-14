@@ -1,5 +1,5 @@
-package controllers;
-import views.View;
+package com.pines.controllers;
+import com.pines.views.View;
 import java.io.FileNotFoundException;
 
 public class Controller {

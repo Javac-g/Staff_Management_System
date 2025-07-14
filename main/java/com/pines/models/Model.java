@@ -1,15 +1,18 @@
-package models;
+package com.pines.models;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
+
+import com.pines.helpers.Validator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 public class Model {
 
     private static final List<User> dataBase = new ArrayList<>();
-    private static final Logger logger = Logger.getLogger(Model.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(Model.class);
     private static final Validator validator = new Validator();
 
 

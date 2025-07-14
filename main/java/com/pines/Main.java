@@ -1,4 +1,6 @@
-import controllers.Controller;
+package com.pines;
+
+import com.pines.controllers.Controller;
 
 import java.io.FileNotFoundException;
 
