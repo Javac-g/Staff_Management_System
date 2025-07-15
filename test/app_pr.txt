@@ -1,13 +1,13 @@
 status = debug
 name = AsyncConfig
 
-# Console Appender
+# === Console Appender ===
 appender.console.type = Console
 appender.console.name = Console
 appender.console.layout.type = PatternLayout
 appender.console.layout.pattern = %d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n
 
-# Rolling File Appender
+# === Rolling File Appender ===
 appender.rolling.type = RollingFile
 appender.rolling.name = RollingFile
 appender.rolling.fileName = logs/app.log
@@ -22,26 +22,26 @@ appender.rolling.policies.size.size = 10MB
 appender.rolling.strategy.type = DefaultRolloverStrategy
 appender.rolling.strategy.max = 7
 
-# Async Console Appender
+# === Async Console Appender ===
 appender.asyncConsole.type = Async
 appender.asyncConsole.name = AsyncConsole
 appender.asyncConsole.appenderRef.1.type = AppenderRef
 appender.asyncConsole.appenderRef.1.ref = Console
 
-# Async File Appender
+# === Async File Appender ===
 appender.asyncFile.type = Async
 appender.asyncFile.name = AsyncFile
 appender.asyncFile.appenderRef.1.type = AppenderRef
 appender.asyncFile.appenderRef.1.ref = RollingFile
 
-# Root Logger
+# === Root Logger ===
 rootLogger.level = info
 rootLogger.appenderRef.1.type = AppenderRef
 rootLogger.appenderRef.1.ref = AsyncConsole
 rootLogger.appenderRef.2.type = AppenderRef
 rootLogger.appenderRef.2.ref = AsyncFile
 
-# Logger for com.pines
+# === Logger for com.pines ===
 logger.com-pines.name = com.pines
 logger.com-pines.level = debug
 logger.com-pines.additivity = false

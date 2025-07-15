@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 public class Model {
 
     private static final List<User> dataBase = new ArrayList<>();
-    private static final Logger logger = LoggerFactory.getLogger(Model.class);
+    private static final Logger logger = LoggerFactory.getLogger("com.pines");
     private static final Validator validator = new Validator();
 
 

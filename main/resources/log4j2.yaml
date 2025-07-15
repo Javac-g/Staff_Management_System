@@ -1,0 +1,48 @@
+Configuration:
+  status: debug
+  name: AsyncConfig
+
+  Appenders:
+    Console:
+      name: Console
+      target: SYSTEM_OUT
+      PatternLayout:
+        pattern: "%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"
+
+    RollingFile:
+      name: RollingFile
+      fileName: logs/app.log
+      filePattern: logs/app-%d{yyyy-MM-dd}-%i.log.gz
+      PatternLayout:
+        pattern: "%d{yyyy-MM-dd HH:mm:ss} [%t] %-5p %c{1}:%L - %msg%n"
+      Policies:
+        TimeBasedTriggeringPolicy:
+          interval: 1
+          modulate: true
+        SizeBasedTriggeringPolicy:
+          size: 10MB
+      DefaultRolloverStrategy:
+        max: 7
+
+    Async:
+      - name: AsyncConsole
+        AppenderRef:
+          - ref: Console
+      - name: AsyncFile
+        AppenderRef:
+          - ref: RollingFile
+
+  Loggers:
+    Root:
+      level: info
+      AppenderRef:
+        - ref: AsyncConsole
+        - ref: AsyncFile
+
+    Logger:
+      - name: com.pines
+        level: debug
+        additivity: false
+        AppenderRef:
+          - ref: AsyncConsole
+          - ref: AsyncFile
