@@ -25,27 +25,19 @@ appender.rolling.strategy.max = 7
 # Async Console Appender
 appender.asyncConsole.type = Async
 appender.asyncConsole.name = AsyncConsole
-appender.asyncConsole.appenderRef.ref = Console
-appender.asyncConsole.appenderRef.type = AppenderRef
+appender.asyncConsole.appenderRefs = Console
 
 # Async File Appender
 appender.asyncFile.type = Async
 appender.asyncFile.name = AsyncFile
-appender.asyncFile.appenderRef.ref = RollingFile
-appender.asyncFile.appenderRef.type = AppenderRef
+appender.asyncFile.appenderRefs = RollingFile
 
 # Root Logger
 rootLogger.level = info
-rootLogger.appenderRef.1.ref = AsyncConsole
-rootLogger.appenderRef.1.type = AppenderRef
-rootLogger.appenderRef.2.ref = AsyncFile
-rootLogger.appenderRef.2.type = AppenderRef
+rootLogger.appenderRefs = AsyncConsole, AsyncFile
 
 # com.pines Logger
 logger.com-pines.name = com.pines
 logger.com-pines.level = debug
 logger.com-pines.additivity = false
-logger.com-pines.appenderRef.1.ref = AsyncConsole
-logger.com-pines.appenderRef.1.type = AppenderRef
-logger.com-pines.appenderRef.2.ref = AsyncFile
-logger.com-pines.appenderRef.2.type = AppenderRef
+logger.com-pines.appenderRefs = AsyncConsole, AsyncFile
