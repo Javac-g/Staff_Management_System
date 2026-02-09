@@ -1,4 +1,6 @@
-# Java Staff Management System
+<div id="header">
+  <img src="https://github.com/Javac-g/Staff_Management_System/blob/master/st_logo.png?raw=true"/>
+</div>
 
 A Java-based Staff Management System designed to manage employee data, roles, and organizational structure in a clear and structured way.  
 The project focuses on clean object-oriented design, separation of concerns, and practical business logic modeling.
