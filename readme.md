@@ -30,12 +30,14 @@ This project is suitable for:
 
 ## 🧱 Project Structure
 
+```text
 src/
-├── model/ # Core domain classes (Employee, Role, etc.)
-├── service/ # Business logic and staff operations
-├── repository/ # Data storage and access logic
-├── util/ # Helper and utility classes
-└── Main.java # Application entry point
+├── model/        # Core domain classes (Employee, Role, etc.)
+├── service/      # Business logic and staff operations
+├── repository/   # Data storage and access logic
+├── util/         # Helper and utility classes
+└── Main.java     # Application entry point
+```
 
 
 ---
